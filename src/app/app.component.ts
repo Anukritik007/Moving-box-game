@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { ListenerService } from './listener.service';
 import { Subscription } from 'rxjs';
 import { IBox } from './interfaces';
@@ -8,17 +15,24 @@ import { IBox } from './interfaces';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnDestroy, OnInit {
+export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   public title = 'Moveable box generator';
   public boxes: Array<IBox> = [];
   public totalBoxes: number = 0;
   public selectedBoxId?: number;
   public subscription: Subscription;
+  public boundingFrameRect: DOMRect;
+
+  @ViewChild('frame') public boundingFrame: ElementRef;
 
   constructor(private _listenerService: ListenerService) {}
 
   public ngOnInit(): void {
     this._subscribeToListener();
+  }
+  public ngAfterViewInit(): void {
+    this.boundingFrameRect = this.boundingFrame.nativeElement.getBoundingClientRect();
+    // console.log(this.boundingFrameRect);
   }
 
   public onAddClick = () => {
@@ -54,7 +68,7 @@ export class AppComponent implements OnDestroy, OnInit {
   private _subscribeToListener = () => {
     this.subscription = this._listenerService.onKeyDown$.subscribe(
       (e: KeyboardEvent) => {
-        console.log('KeyCode:', e.keyCode);
+        // console.log('KeyCode:', e.keyCode);
         this._moveOnKeyStroke(e.keyCode);
       }
     );
@@ -71,10 +85,11 @@ export class AppComponent implements OnDestroy, OnInit {
         case 37:
           //move left
           this.boxes = this.boxes.map((box) => {
-            if (box.id === this.selectedBoxId) {
+            const newPosition_ = box.left - 100;
+            if (box.id === this.selectedBoxId && newPosition_ >= 0) {
               return {
                 ...box,
-                left: box.left - 100,
+                left: newPosition_,
               };
             }
             return box;
@@ -84,10 +99,14 @@ export class AppComponent implements OnDestroy, OnInit {
         case 39:
           //move right
           this.boxes = this.boxes.map((box) => {
-            if (box.id === this.selectedBoxId) {
+            const newPosition_ = box.left + 100;
+            if (
+              box.id === this.selectedBoxId &&
+              newPosition_ + 100 <= this.boundingFrameRect.width
+            ) {
               return {
                 ...box,
-                left: box.left + 100,
+                left: newPosition_,
               };
             }
             return box;
@@ -97,10 +116,11 @@ export class AppComponent implements OnDestroy, OnInit {
         case 38:
           //move up
           this.boxes = this.boxes.map((box) => {
-            if (box.id === this.selectedBoxId) {
+            const newPosition_ = box.top - 100;
+            if (box.id === this.selectedBoxId && newPosition_ >= 0) {
               return {
                 ...box,
-                top: box.top - 100,
+                top: newPosition_,
               };
             }
             return box;
@@ -110,10 +130,15 @@ export class AppComponent implements OnDestroy, OnInit {
         case 40:
           //move down
           this.boxes = this.boxes.map((box) => {
-            if (box.id === this.selectedBoxId) {
+            const newPosition_ = box.top + 100;
+            if (
+              box.id === this.selectedBoxId &&
+              newPosition_ + 100 <= this.boundingFrameRect.height
+            ) {
+              console.log(newPosition_);
               return {
                 ...box,
-                top: box.top + 100,
+                top: newPosition_,
               };
             }
             return box;

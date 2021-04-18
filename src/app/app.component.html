@@ -1,7 +1,7 @@
 <div class="container">
   <div class="title">{{title}}</div>
   <div #frame class="frame">
-    <div #movableBoxes *ngFor="let box of boxes">
+    <div *ngFor="let box of boxes">
       <div [id]="box.id" [ngClass]="['movable-box',(selectedBoxId===box.id)?'highlight-selected':'']"
         [ngStyle]="{'top':box.top+'px', 'left':box.left+'px'}" (click)="onBoxClick(box.id)">
         {{box.id}}
