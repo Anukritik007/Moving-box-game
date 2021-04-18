@@ -1,0 +1,28 @@
+.container {
+  .frame {
+    height: 70vh;
+    width: 80vw;
+    border: 2px solid blue;
+    margin: 20px;
+    position: relative;
+
+    .movable-box {
+      height: 100px;
+      width: 100px;
+      background-color: burlywood;
+      border: 2px solid red;
+      display: inline-block;
+      position: absolute;
+    }
+
+    .highlight-selected {
+      outline: 3px solid yellow;
+      outline-offset: -2px;
+    }
+  }
+
+  .controls {
+    width: 100%;
+    text-align: center;
+  }
+}
