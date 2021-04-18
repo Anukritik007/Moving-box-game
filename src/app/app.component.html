@@ -1,13 +1,16 @@
 <div class="container">
   <div class="title">{{title}}</div>
-  <div #frame class="frame">
-    <div *ngFor="let box of boxes">
-      <div [id]="box.id" [ngClass]="['movable-box',(selectedBoxId===box.id)?'highlight-selected':'']"
-        [ngStyle]="{'top':box.top+'px', 'left':box.left+'px'}" (click)="onBoxClick(box.id)">
-        {{box.id}}
-      </div>
+  <div class="game-fence">
+    <div #frame class="frame">
+      <ng-container *ngFor="let box of boxes">
+        <div [id]="box.id" [ngClass]="['movable-box',(selectedBoxId===box.id)?'highlight-selected':'']"
+          [ngStyle]="{'top':box.top+'px', 'left':box.left+'px'}" (click)="onBoxClick(box.id)">
+          {{box.id}}
+        </div>
+      </ng-container>
     </div>
   </div>
+
   <div class="controls">
     <button (click)="onAddClick()">Add</button>
     <button (click)="onToggleControl()">Toggle keyboard control</button>
