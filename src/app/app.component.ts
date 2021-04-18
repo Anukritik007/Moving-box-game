@@ -22,6 +22,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
   public selectedBoxId?: number;
   public subscription: Subscription;
   public boundingFrameRect: DOMRect;
+  public iskeyboardToggled = false;
 
   @ViewChild('frame') public boundingFrame: ElementRef;
 
@@ -53,7 +54,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewInit {
    * Toggles keyboard control by unsubscribing/subscribing to the listener
    */
   public onToggleControl = () => {
-    console.log(this.subscription);
+    this.iskeyboardToggled = !this.iskeyboardToggled;
     if (!this.subscription.closed) {
       this.subscription.unsubscribe();
     } else {

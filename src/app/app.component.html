@@ -13,6 +13,8 @@
 
   <div class="controls">
     <button (click)="onAddClick()">Add</button>
-    <button (click)="onToggleControl()">Toggle keyboard control</button>
+    <button [ngClass]="[iskeyboardToggled?'keyboard-inactive':'keyboard-active']" (click)="onToggleControl()">Toggle
+      keyboard
+      control</button>
   </div>
 </div>
